@@ -1,0 +1,7 @@
+# Ignore archives
+*.tar*
+
+# Editor files
+*~
+
+mplab_x/

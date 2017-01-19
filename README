@@ -1,0 +1,14 @@
+MPLAB X is an Integrated Development Environment (IDE) for writing and
+debugging applications for Microchip's microcontrollers and digital 
+signal controllers.
+
+If building on a 64-bit Slackware, you will need 32-bit compatibility
+libraries. See the Microchip wiki for required files:
+
+http://microchip.wikidot.com/install:mplabx-lin64
+
+Alternately, simply follow Eric Hameleers' multilib guide:
+
+http://alien.slackbook.org/dokuwiki/doku.php?id=slackware:multilib
+
+His provided packages satisfy all MPLAB X library requirements.

@@ -1,0 +1,19 @@
+# HOW TO EDIT THIS FILE:
+# The "handy ruler" below makes it easier to edit a package description.
+# Line up the first '|' above the ':' following the base package name, and
+# the '|' on the right side marks the last column you can put a character in.
+# You must make exactly 11 lines for the formatting to be correct.  It's also
+# customary to leave one space after the ':' except on otherwise blank lines.
+
+        |-----handy-ruler------------------------------------------------------|
+mplab_x: mplab_x (MPLAB X IDE for Microchip products)
+mplab_x:
+mplab_x: Microchip's Integrated Development Environment (IDE) for developing
+mplab_x: applications targeting Microchip microcontrollers and digital signal
+mplab_x: controllers.
+mplab_x:
+mplab_x:
+mplab_x:
+mplab_x:
+mplab_x:
+mplab_x:
