@@ -1,6 +1,9 @@
 # Ignore archives
 *.tar*
 
+# Ignore installer
+*installer.sh
+
 # Editor files
 *~
 
