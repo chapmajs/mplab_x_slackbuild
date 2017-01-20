@@ -102,6 +102,11 @@ mv /usr/share/applications/mplab*desktop $PKG/usr/share/applications
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 
+# Move udev rules back into the package
+mkdir -p $PKG/etc/udev/rules.d
+mv /etc/udev/rules.d/99-jlink.rules $PKG/etc/udev/rules.d
+mv /etc/udev/rules.d/z0*_mchp_*.rules $PKG/etc/udev/rules.d
+
 mkdir -p $PKG/install
 cat $CWD/slack-desc > $PKG/install/slack-desc
 
