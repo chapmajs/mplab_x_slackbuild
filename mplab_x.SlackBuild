@@ -25,7 +25,6 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 PRGNAM=mplab_x
-INSTALLER_NAME=MPLABX-v3.51-linux-installer
 VERSION=${VERSION:-3.51}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
@@ -42,6 +41,8 @@ CWD=$(pwd)
 TMP=${TMP:-/tmp/SBo}
 PKG=$TMP/package-$PRGNAM
 OUTPUT=${OUTPUT:-/tmp}
+INSTALLER_NAME=MPLABX-v3.51-linux-installer
+INSTALL_DIR=$PKG/opt/microchip/mplabx/v$VERSION
 
 set -e
 
@@ -53,6 +54,50 @@ tar xvf $CWD/$INSTALLER_NAME.tar
 chown -R root:root .
 
 ./$INSTALLER_NAME.sh -- --mode unattended --installdir $PKG/opt/microchip/mplabx/v$VERSION
+
+# This installer makes a mess on the filesystem, apparently it does not fully respect the
+# --installdir option, so now we'll clean up after it
+
+# Strip install prefix from config files, scripts, desktop links
+grep -rl "$PKG" $INSTALL_DIR | xargs sed -i "s|$PKG||g"
+
+# Clean up symlinks
+find /usr -lname "$PKG*" | xargs rm
+
+# The following symlinks are created properly, but outside the package
+rm /etc/.mplab_ide/mchplinusbdevice
+rm -r /etc/.mplab_ide
+rm /usr/lib/libSerialAccessLink_3_15.so
+rm /usr/lib/libUSBAccessLink_3_22.so
+rm /usr/local/lib/libmchpusb-1.0.so
+
+# Create paths for symlinks in package root
+mkdir -p $PKG/usr/bin
+mkdir $PKG/usr/lib
+mkdir -p $PKG/usr/local/lib
+mkdir -p $PKG/etc/.mplab_ide
+
+# Create executable symlinks
+ln -s /opt/microchip/mplabx/v3.51/mplab_ide/bin/mdb.sh $PKG/usr/bin/mdb
+ln -s /opt/microchip/mplabx/v3.51/mplab_ide/bin/mplab_ide $PKG/usr/bin/mplab_ide
+ln -s /opt/microchip/mplabx/v3.51/mplab_ipe/mplab_ipe $PKG/usr/bin/mplab_ipe
+ln -s /opt/microchip/mplabx/v3.51/mplab_ide/bin/prjMakefilesGenerator.sh $PKG/usr/bin/prjMakefilesGenerator
+
+# Create mplabcomm driver symlinks
+ln -s /opt/microchip/mplabcomm/v3.22.00/lib/mchplinusbdevice $PKG/etc/.mplab_ide/mchplinusbdevice
+ln -s /opt/microchip/mplabcomm/v3.22.00/lib/libSerialAccessLink_3_15.so $PKG/usr/lib/libSerialAccessLink_3_15.so
+ln -s /opt/microchip/mplabcomm/v3.22.00/lib/libUSBAccessLink_3_22.so $PKG/usr/lib/libUSBAccessLink_3_22.so
+ln -s /opt/microchip/mplabcomm/v3.22.00/lib/libmchpusb-1.0.so.0.0.0 $PKG/usr/local/lib/libmchpusb-1.0.so
+
+# Move molabcomm back into the package area
+mv /opt/microchip/mplabcomm $PKG/opt/microchip/mplabcomm
+rm -r /opt/microchip
+
+# Move icons and desktop links back into the package area
+mkdir -p $PKG/usr/share/icons
+mv /usr/share/icons/mplab_i*png $PKG/usr/share/icons
+mkdir -p $PKG/usr/share/applications
+mv /usr/share/applications/mplab*desktop $PKG/usr/share/applications
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
